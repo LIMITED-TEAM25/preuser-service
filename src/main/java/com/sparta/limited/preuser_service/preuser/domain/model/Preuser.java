@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -63,9 +64,9 @@ public class Preuser extends BaseEntity {
 
     @Column(name = "announce_date", nullable = false)
     private LocalDateTime announceDate;
-    
+
     @OneToMany(mappedBy = "preuser")
-    private List<PreuserUser> preuserUserList;
+    private List<PreuserUser> preuserUserList = new ArrayList<>();
 
     private Preuser(
         String preuserTitle,
