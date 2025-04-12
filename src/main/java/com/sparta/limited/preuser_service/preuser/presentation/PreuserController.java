@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/preuser")
+@RequestMapping("/api/v1/preusers/")
 public class PreuserController {
 
     private final PreuserService preuserService;
