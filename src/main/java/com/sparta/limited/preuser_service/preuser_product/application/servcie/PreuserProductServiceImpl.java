@@ -7,6 +7,7 @@ import com.sparta.limited.preuser_service.preuser_product.domain.model.PreuserPr
 import com.sparta.limited.preuser_service.preuser_product.domain.repository.PreuserProductRepository;
 import com.sparta.limited.preuser_service.preuser_product.infrastructure.client.ProductClient;
 import com.sparta.limited.preuser_service.preuser_product.infrastructure.dto.response.ProductReadResponse;
+import com.sparta.limited.preuser_service.preuser_product.infrastructure.mapper.ProductMapper;
 import jakarta.transaction.Transactional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +30,7 @@ public class PreuserProductServiceImpl implements PreuserProductService {
 
         ProductReadResponse product = productClient.getProduct(productId);
 
-        PreuserProduct preuserProduct = PreuserProduct.ofFegin(
-            product.getTitle(),
-            product.getDescription(),
-            product.getPrice(),
-            product.getId(),
-            request.getQuantity()
-        );
+        PreuserProduct preuserProduct = ProductMapper.toEntity(product, request.getQuantity());
 
         preuserProductRepository.save(preuserProduct);
 
