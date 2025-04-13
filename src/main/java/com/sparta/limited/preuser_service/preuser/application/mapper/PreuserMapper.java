@@ -2,12 +2,30 @@ package com.sparta.limited.preuser_service.preuser.application.mapper;
 
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserCreateResponse;
+import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserGetResponse;
 import com.sparta.limited.preuser_service.preuser.domain.model.Preuser;
 
 public class PreuserMapper {
 
     public static PreuserCreateResponse toPreuserCreateResponse(Preuser preuser) {
         return PreuserCreateResponse.of(preuser.getId());
+    }
+
+    public static PreuserGetResponse toPreuserGetResponse(Preuser preuser) {
+        return PreuserGetResponse.of(
+            preuser.getId(),
+            preuser.getPreuserTitle(),
+            preuser.getPreuserCount(),
+            preuser.getGenderLimit(),
+            preuser.getAgeLimit(),
+            preuser.getPreuserProductId(),
+            preuser.getRecruitStartAt(),
+            preuser.getRecruitEndAt(),
+            preuser.getPreuserStartAt(),
+            preuser.getPreuserEndAt(),
+            preuser.getPreuserStatus(),
+            preuser.getAnnounceDate()
+        );
     }
 
     public static Preuser toEntity(PreuserCreateRequest request) {
