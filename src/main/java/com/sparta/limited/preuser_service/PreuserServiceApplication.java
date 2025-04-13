@@ -1,11 +1,12 @@
 package com.sparta.limited.preuser_service;
 
+import com.sparta.limited.preuser_service.preuser_product.infrastructure.client.ProductClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableFeignClients(basePackageClasses = ProductClient.class)
 public class PreuserServiceApplication {
 
     public static void main(String[] args) {
