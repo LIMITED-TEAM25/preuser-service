@@ -5,9 +5,10 @@ import com.sparta.limited.common_module.exception.ErrorCode;
 import com.sparta.limited.preuser_service.preuser_product.domain.model.PreuserProduct;
 import com.sparta.limited.preuser_service.preuser_product.domain.repository.PreuserProductRepository;
 import com.sparta.limited.preuser_service.preuser_product.infrastructure.persistence.JpaPreuserProductRepository;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,13 +19,22 @@ public class PreuserProductRepositoryImpl implements PreuserProductRepository {
 
     @Override
     public void save(PreuserProduct preuserProduct) {
+        jpaPreuserProductRepository.save(preuserProduct);
     }
 
     @Override
     public void findByProductId(UUID productId) {
         jpaPreuserProductRepository.findByProductId(productId)
-            .ifPresent(jpaPreuserProduct -> {
-                throw new BusinessException(ErrorCode.DUPLICATE_RESOURCE);
-            });
+                .ifPresent(jpaPreuserProduct -> {
+                    throw new BusinessException(ErrorCode.DUPLICATE_RESOURCE);
+                });
     }
+
+    @Override
+    public PreuserProduct findById(UUID preuserProductId) {
+        return jpaPreuserProductRepository.findById(preuserProductId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCES_NOT_FOUND));
+    }
+
+
 }
