@@ -121,4 +121,8 @@ public class Preuser extends BaseEntity {
             announceDate
         );
     }
+
+    public void updateStatus(PreuserStatus status) {
+        this.preuserStatus = status;
+    }
 }

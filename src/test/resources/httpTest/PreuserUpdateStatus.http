@@ -1,0 +1,23 @@
+### 체험단 상태 변경
+PATCH localhost:8080/api/v1/preusers/7ee62347-d5c6-4a18-9d69-5d46251a1e2e/status
+Content-Type: application/json
+
+{
+  "preuserStatus": "RECRUITING"
+}
+
+### 존재하지 않는 체험단 상태 변경
+PATCH localhost:8080/api/v1/preusers/7ee62347-d5c6-4a18-9d69-5d46251a1e2f/status
+Content-Type: application/json
+
+{
+  "preuserStatus": "RECRUITING"
+}
+
+### 존재하지 않는 값 요청
+PATCH localhost:8080/api/v1/preusers/7ee62347-d5c6-4a18-9d69-5d46251a1e2e/status
+Content-Type: application/json
+
+{
+  "preuserStatus": "RECRUITIE"
+}
