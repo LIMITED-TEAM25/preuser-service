@@ -11,7 +11,7 @@ public class PreuserUpdateStatusResponse {
     private String preuserTitle;
     private PreuserStatus preuserStatus;
 
-    public PreuserUpdateStatusResponse(
+    private PreuserUpdateStatusResponse(
         UUID preuserId,
         String preuserTitle,
         PreuserStatus preuserStatus) {
