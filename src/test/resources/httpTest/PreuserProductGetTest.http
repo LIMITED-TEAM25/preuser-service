@@ -1,0 +1,6 @@
+### 체험 상품 조회 정상
+GET http://localhost:8080/api/v1/preuser-products/7ec57742-8fc3-4865-897a-e94214367b74
+
+
+###존재하지 않는 체험 상품 조회
+GET http://localhost:8080/api/v1/preuser-products/7ec57742-8fc3-4865-897a-e94214367b72
