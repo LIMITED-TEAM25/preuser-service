@@ -5,3 +5,7 @@ Content-Type: application/json
 ###존재하지 않는 체험단 조회
 GET localhost:8080/api/v1/preusers/7ee62347-d5c6-4a18-9d69-5d46251a1e2f
 Content-Type: application/json
+
+###체험단 전체 조회
+GET http://localhost:8080/api/v1/preusers
+Content-Type: application/json
