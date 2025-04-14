@@ -9,12 +9,12 @@ import com.sparta.limited.preuser_service.preuser.application.mapper.PreuserMapp
 import com.sparta.limited.preuser_service.preuser.domain.model.Preuser;
 import com.sparta.limited.preuser_service.preuser.domain.repository.PreuserRepository;
 import com.sparta.limited.preuser_service.preuser.domain.status.PreuserStatus;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -54,6 +54,7 @@ public class PreuserServiceImpl implements PreuserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<PreuserGetForPageResponse> getAllPreuesr(Pageable pageable) {
 
         Page<Preuser> preuser = preuserRepository.findAll(pageable);
