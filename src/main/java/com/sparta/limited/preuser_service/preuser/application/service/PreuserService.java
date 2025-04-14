@@ -2,9 +2,13 @@ package com.sparta.limited.preuser_service.preuser.application.service;
 
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserCreateResponse;
+import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserGetForPageResponse;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserGetResponse;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserUpdateStatusResponse;
 import com.sparta.limited.preuser_service.preuser.domain.status.PreuserStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.UUID;
 
 public interface PreuserService {
@@ -14,5 +18,7 @@ public interface PreuserService {
     PreuserGetResponse getPreuser(UUID preuserId);
 
     PreuserUpdateStatusResponse updatePreuserStatus(UUID preuserId,
-        PreuserStatus preuserStatus);
+                                                    PreuserStatus preuserStatus);
+
+    Page<PreuserGetForPageResponse> getAllPreuesr(Pageable pageable);
 }
