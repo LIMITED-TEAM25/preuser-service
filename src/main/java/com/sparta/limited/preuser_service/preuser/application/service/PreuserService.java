@@ -20,4 +20,6 @@ public interface PreuserService {
     Page<PreuserGetForPageResponse> getAllPreuesr(Pageable pageable);
 
     PreuserEventApplyResponse applyPreuserEvents(UUID preuserId, Long userId);
+
+    PreuserUserSelectResponse selectPreuserUser(UUID preuesrId);
 }
