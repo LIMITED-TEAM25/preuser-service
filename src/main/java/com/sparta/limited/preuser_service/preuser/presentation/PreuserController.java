@@ -23,7 +23,7 @@ public class PreuserController {
 
 
     @PostMapping
-    @RoleCheck("ROLE_MASTER")
+    @RoleCheck("ROLE_ADMIN")
     public ResponseEntity<PreuserCreateResponse> createPreuser(
             @RequestBody PreuserCreateRequest request) {
         PreuserCreateResponse response = preuserService.createPreuser(request);
@@ -41,7 +41,7 @@ public class PreuserController {
     }
 
     @PatchMapping("/{preuserId}/status")
-    @RoleCheck("ROLE_MASTER")
+    @RoleCheck("ROLE_ADMIN")
     public ResponseEntity<PreuserUpdateStatusResponse> updatePreuserStatus(
             @PathVariable UUID preuserId,
             @RequestBody PreuserUpdateStatusRequest preuserStatus
@@ -73,6 +73,7 @@ public class PreuserController {
     }
 
     @PostMapping("{preuserId}/preuserUser")
+    @RoleCheck("ROLE_ADMIN")
     public ResponseEntity<PreuserUserSelectResponse> selectPreuserUser(
             @PathVariable UUID preuserId
     ) {
