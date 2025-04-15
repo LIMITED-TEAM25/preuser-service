@@ -100,7 +100,7 @@ public class PreuserServiceImpl implements PreuserService {
     @Transactional
     public PreuserUserSelectResponse selectPreuserUser(UUID preuserId) {
 
-        Preuser preuser = preuserRepository.findById(preuserId);
+        Preuser preuser = preuserRepository.findWithPessimisticLockById(preuserId);
 
         preuserUserRepository.existsByPreuserIdAndIsSelectedTrue(preuserId);
 
