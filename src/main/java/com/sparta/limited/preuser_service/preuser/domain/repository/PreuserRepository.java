@@ -13,4 +13,6 @@ public interface PreuserRepository {
     Preuser findById(UUID preuserId);
 
     Page<Preuser> findAll(Pageable pageable);
+
+    Preuser findWithPessimisticLockById(UUID preuserId);
 }
