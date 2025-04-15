@@ -1,12 +1,13 @@
 package com.sparta.limited.preuser_service;
 
-import com.sparta.limited.preuser_service.preuser_product.infrastructure.client.ProductClient;
+import com.sparta.limited.common_module.common.EnableCommonModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableFeignClients(basePackageClasses = ProductClient.class)
+@EnableCommonModule
+@EnableFeignClients
 public class PreuserServiceApplication {
 
     public static void main(String[] args) {

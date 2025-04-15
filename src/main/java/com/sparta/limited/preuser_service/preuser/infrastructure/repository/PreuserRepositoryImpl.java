@@ -33,4 +33,10 @@ public class PreuserRepositoryImpl implements PreuserRepository {
     public Page<Preuser> findAll(Pageable pageable) {
         return jpaPreuserRepository.findAll(pageable);
     }
+
+    @Override
+    public Preuser findWithPessimisticLockById(UUID preuserId) {
+        return jpaPreuserRepository.findWithPessimisticLockById(preuserId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCES_NOT_FOUND));
+    }
 }

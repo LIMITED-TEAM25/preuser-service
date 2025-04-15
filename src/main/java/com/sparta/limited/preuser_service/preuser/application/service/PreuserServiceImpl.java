@@ -1,16 +1,19 @@
 package com.sparta.limited.preuser_service.preuser.application.service;
 
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserCreateResponse;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserGetForPageResponse;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserGetResponse;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserUpdateStatusResponse;
+import com.sparta.limited.preuser_service.preuser.application.dto.response.*;
 import com.sparta.limited.preuser_service.preuser.application.mapper.PreuserMapper;
+import com.sparta.limited.preuser_service.preuser.application.validate.ApplyPreuserPeriodValidator;
+import com.sparta.limited.preuser_service.preuser.application.validate.ApplyPreuserUserAgeValidator;
+import com.sparta.limited.preuser_service.preuser.application.validate.ApplyPreuserUserGenderValidator;
 import com.sparta.limited.preuser_service.preuser.domain.model.Preuser;
+import com.sparta.limited.preuser_service.preuser.domain.model.PreuserUser;
 import com.sparta.limited.preuser_service.preuser.domain.repository.PreuserRepository;
+import com.sparta.limited.preuser_service.preuser.domain.repository.PreuserUserRepository;
 import com.sparta.limited.preuser_service.preuser.domain.status.PreuserStatus;
+import com.sparta.limited.preuser_service.preuser.infrastructure.client.UserClient;
+import com.sparta.limited.preuser_service.preuser.infrastructure.dto.response.UserSearchUserIdResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,10 +23,11 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class PreuserServiceImpl implements PreuserService {
 
     private final PreuserRepository preuserRepository;
+    private final PreuserUserRepository preuserUserRepository;
+    private final UserClient userClient;
 
     @Override
     @Transactional
@@ -53,6 +57,7 @@ public class PreuserServiceImpl implements PreuserService {
         return PreuserMapper.toPreuserUpdateStatusResponse(preuser);
     }
 
+
     @Override
     @Transactional(readOnly = true)
     public Page<PreuserGetForPageResponse> getAllPreuesr(Pageable pageable) {
@@ -60,5 +65,29 @@ public class PreuserServiceImpl implements PreuserService {
         Page<Preuser> preuser = preuserRepository.findAll(pageable);
 
         return preuser.map(PreuserMapper::toPreuserGetForPageResponse);
+    }
+
+    @Override
+    @Transactional
+    public PreuserEventApplyResponse applyPreuserEvents(UUID preuserId, Long userId) {
+
+
+        Preuser preuser = preuserRepository.findWithPessimisticLockById(preuserId);
+
+        preuserUserRepository.existsByPreuserIdAndUserId(preuserId, userId);
+
+        ApplyPreuserPeriodValidator.validate(preuser.getRecruitStartAt(), preuser.getRecruitEndAt());
+
+        UserSearchUserIdResponse response = userClient.getUserById(userId);
+
+        ApplyPreuserUserAgeValidator.validate(preuser.getAgeLimit(), response.getAge());
+
+        ApplyPreuserUserGenderValidator.validate(preuser.getGenderLimit(), response.getGender());
+
+        PreuserUser preuserUser = PreuserUser.of(userId, preuser);
+
+        preuserUserRepository.save(preuserUser);
+
+        return PreuserEventApplyResponse.of(preuser.getId(), preuser.getPreuserTitle(), "신청 완료");
     }
 }

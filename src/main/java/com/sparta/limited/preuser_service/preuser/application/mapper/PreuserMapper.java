@@ -1,10 +1,7 @@
 package com.sparta.limited.preuser_service.preuser.application.mapper;
 
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserCreateResponse;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserGetForPageResponse;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserGetResponse;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserUpdateStatusResponse;
+import com.sparta.limited.preuser_service.preuser.application.dto.response.*;
 import com.sparta.limited.preuser_service.preuser.domain.model.Preuser;
 
 public class PreuserMapper {
@@ -18,6 +15,15 @@ public class PreuserMapper {
                 preuser.getId(),
                 preuser.getPreuserTitle(),
                 preuser.getPreuserStatus()
+        );
+    }
+
+
+    public static PreuserEventApplyResponse toPreuserEventApplyResponse(Preuser preuser) {
+        return PreuserEventApplyResponse.of(
+                preuser.getId(),
+                preuser.getPreuserTitle(),
+                "신청이 완료 되었습니다"
         );
     }
 
