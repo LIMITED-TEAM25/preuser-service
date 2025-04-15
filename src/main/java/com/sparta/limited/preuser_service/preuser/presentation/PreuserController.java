@@ -71,4 +71,14 @@ public class PreuserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @PostMapping("{preuserId}/preuserUser")
+    public ResponseEntity<PreuserUserSelectResponse> selectPreuserUser(
+            @PathVariable UUID preuserId
+    ) {
+        PreuserUserSelectResponse response = preuserService.selectPreuserUser(preuserId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
 }
