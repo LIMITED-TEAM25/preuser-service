@@ -1,7 +1,5 @@
 package com.sparta.limited.preuser_service.preuser.application.service;
 
-import com.sparta.limited.common_module.exception.BusinessException;
-import com.sparta.limited.common_module.exception.ErrorCode;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.*;
 import com.sparta.limited.preuser_service.preuser.application.mapper.PreuserMapper;
@@ -78,19 +76,13 @@ public class PreuserServiceImpl implements PreuserService {
 
         preuserUserRepository.existsByPreuserIdAndUserId(preuserId, userId);
 
-        if (!ApplyPreuserPeriodValidator.validateApplyPeriod(preuser.getRecruitStartAt(), preuser.getRecruitEndAt())) {
-            throw new BusinessException(ErrorCode.UNMATCHED_USER_DATA, "신청기간이 아닙니다");
-        }
+        ApplyPreuserPeriodValidator.validate(preuser.getRecruitStartAt(), preuser.getRecruitEndAt());
 
         UserSearchUserIdResponse response = userClient.getUserById(userId);
 
-        if (!ApplyPreuserUserAgeValidator.validateAgeLimit(preuser.getAgeLimit(), response.getAge())) {
-            throw new BusinessException(ErrorCode.UNMATCHED_USER_DATA, "신청 가능한 나이가 아닙니다");
-        }
+        ApplyPreuserUserAgeValidator.validate(preuser.getAgeLimit(), response.getAge());
 
-        if (!ApplyPreuserUserGenderValidator.validateUserGenderLimit(preuser.getGenderLimit(), response.getGender())) {
-            throw new BusinessException(ErrorCode.UNMATCHED_USER_DATA, "신청 가능한 성별이 아닙니다");
-        }
+        ApplyPreuserUserGenderValidator.validate(preuser.getGenderLimit(), response.getGender());
 
         PreuserUser preuserUser = PreuserUser.of(userId, preuser);
 
