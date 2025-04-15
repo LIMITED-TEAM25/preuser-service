@@ -1,18 +1,12 @@
 package com.sparta.limited.preuser_service.preuser.domain.model;
 
 import com.sparta.limited.common_module.common.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.util.UUID;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -31,5 +25,22 @@ public class PreuserUser extends BaseEntity {
     @JoinColumn(name = "preuser_id", nullable = false)
     private Preuser preuser;
 
+    private PreuserUser(
+            Long userId,
+            Preuser preuser
+    ) {
+        this.userId = userId;
+        this.preuser = preuser;
+    }
 
+    public static PreuserUser of(
+            Long userId,
+            Preuser preuser
+    ) {
+        return new PreuserUser(
+                userId,
+                preuser
+        );
+    }
+    
 }
