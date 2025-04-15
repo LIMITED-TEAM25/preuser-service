@@ -1,11 +1,9 @@
 package com.sparta.limited.preuser_service.preuser.presentation;
 
+import com.sparta.limited.common_module.common.aop.RoleCheck;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserUpdateStatusRequest;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserCreateResponse;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserGetForPageResponse;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserGetResponse;
-import com.sparta.limited.preuser_service.preuser.application.dto.response.PreuserUpdateStatusResponse;
+import com.sparta.limited.preuser_service.preuser.application.dto.response.*;
 import com.sparta.limited.preuser_service.preuser.application.service.PreuserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +23,7 @@ public class PreuserController {
 
 
     @PostMapping
+    @RoleCheck("ROLE_MASTER")
     public ResponseEntity<PreuserCreateResponse> createPreuser(
             @RequestBody PreuserCreateRequest request) {
         PreuserCreateResponse response = preuserService.createPreuser(request);
@@ -42,6 +41,7 @@ public class PreuserController {
     }
 
     @PatchMapping("/{preuserId}/status")
+    @RoleCheck("ROLE_MASTER")
     public ResponseEntity<PreuserUpdateStatusResponse> updatePreuserStatus(
             @PathVariable UUID preuserId,
             @RequestBody PreuserUpdateStatusRequest preuserStatus
@@ -61,4 +61,14 @@ public class PreuserController {
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
+    @PostMapping("/events/{preuserId}")
+    @RoleCheck("ROLE_USER")
+    public ResponseEntity<PreuserEventApplyResponse> applyPreuserEvents(
+            @PathVariable UUID preuserId,
+            @RequestHeader("X-User-Id") Long userId
+    ) {
+        PreuserEventApplyResponse response = preuserService.applyPreuserEvents(preuserId, userId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 }
