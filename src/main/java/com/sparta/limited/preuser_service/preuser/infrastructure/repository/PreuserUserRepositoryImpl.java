@@ -9,6 +9,7 @@ import com.sparta.limited.preuser_service.preuser.infrastructure.persistence.Jpa
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -27,5 +28,22 @@ public class PreuserUserRepositoryImpl implements PreuserUserRepository {
     @Override
     public void save(PreuserUser preuserUser) {
         jpaPreuserUserRepository.save(preuserUser);
+    }
+
+    @Override
+    public List<PreuserUser> findByPreuserId(UUID preuserId) {
+        return jpaPreuserUserRepository.findByPreuserId(preuserId);
+    }
+
+    @Override
+    public void saveAll(List<PreuserUser> selectedUsers) {
+        jpaPreuserUserRepository.saveAll(selectedUsers);
+    }
+
+    @Override
+    public void existsByPreuserIdAndIsSelectedTrue(UUID preuserId) {
+        if (jpaPreuserUserRepository.existsByPreuserIdAndIsSelectedTrue(preuserId)) {
+            throw new BusinessException(ErrorCode.DUPLICATE_RESOURCE, "이미 선정한 체험단 입니다");
+        }
     }
 }
