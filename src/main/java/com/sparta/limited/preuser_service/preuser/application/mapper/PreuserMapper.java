@@ -3,6 +3,7 @@ package com.sparta.limited.preuser_service.preuser.application.mapper;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.*;
 import com.sparta.limited.preuser_service.preuser.domain.model.Preuser;
+import com.sparta.limited.preuser_service.preuser.domain.status.PreuserStatus;
 import com.sparta.limited.preuser_service.preuser.infrastructure.dto.response.UserSearchUserIdResponse;
 
 import java.util.List;
@@ -65,7 +66,7 @@ public class PreuserMapper {
         );
     }
 
-    public static Preuser toEntity(PreuserCreateRequest request) {
+    public static Preuser toEntity(PreuserCreateRequest request, PreuserStatus status) {
         return Preuser.of(
                 request.getPreuserTitle(),
                 request.getPreuserCount(),
@@ -76,7 +77,7 @@ public class PreuserMapper {
                 request.getRecruitEndAt(),
                 request.getPreuserStartAt(),
                 request.getPreuserEndAt(),
-                request.getPreuserStatus(),
+                status,
                 request.getAnnounceDate()
         );
     }
