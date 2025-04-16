@@ -1,0 +1,14 @@
+### 체험단 선정
+POST localhost:8080/api/v1/preusers/0a48416b-7534-43c8-982e-7e24d16d10df/preuserUser
+X-User-Id: 1
+X-User-Role: ROLE_MASTER
+
+### 존재하지 않는 체험단 선정 요청
+POST localhost:8080/api/v1/preusers/0a48416b-7534-43c8-982e-7e24d16d10de/preuserUser
+X-User-Id: 1
+X-User-Role: ROLE_MASTER
+
+### 체험단 선정 후 재 요청(실패)
+POST localhost:8080/api/v1/preusers/0a48416b-7534-43c8-982e-7e24d16d10df/preuserUser
+X-User-Id: 1
+X-User-Role: ROLE_MASTER

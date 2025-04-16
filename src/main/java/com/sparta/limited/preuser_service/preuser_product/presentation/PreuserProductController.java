@@ -1,5 +1,6 @@
 package com.sparta.limited.preuser_service.preuser_product.presentation;
 
+import com.sparta.limited.common_module.common.aop.RoleCheck;
 import com.sparta.limited.preuser_service.preuser_product.application.dto.request.PreuserProductCreateRequest;
 import com.sparta.limited.preuser_service.preuser_product.application.dto.response.PreuserProductCreateResponse;
 import com.sparta.limited.preuser_service.preuser_product.application.dto.response.PreuserProductGetResponse;
@@ -21,6 +22,7 @@ public class PreuserProductController {
     private final PreuserProductService preuserProductService;
 
     @PostMapping
+    @RoleCheck("ROLE_ADMIN")
     public ResponseEntity<PreuserProductCreateResponse> createPreuserProduct(
             @RequestBody PreuserProductCreateRequest request) {
         PreuserProductCreateResponse response = preuserProductService.createPreuserProduct(request);

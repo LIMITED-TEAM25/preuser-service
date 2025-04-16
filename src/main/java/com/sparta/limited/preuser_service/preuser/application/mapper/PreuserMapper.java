@@ -3,6 +3,9 @@ package com.sparta.limited.preuser_service.preuser.application.mapper;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.*;
 import com.sparta.limited.preuser_service.preuser.domain.model.Preuser;
+import com.sparta.limited.preuser_service.preuser.infrastructure.dto.response.UserSearchUserIdResponse;
+
+import java.util.List;
 
 public class PreuserMapper {
 
@@ -33,6 +36,17 @@ public class PreuserMapper {
                 preuser.getPreuserTitle()
         );
     }
+
+    public static PreuserUserSelectResponse toPreuserUserSelectResponse(Preuser preuser,
+                                                                        List<UserSearchUserIdResponse> userInfoList
+    ) {
+        return PreuserUserSelectResponse.of(
+                preuser.getId(),
+                preuser.getPreuserCount(),
+                userInfoList
+        );
+    }
+
 
     public static PreuserGetResponse toPreuserGetResponse(Preuser preuser) {
         return PreuserGetResponse.of(
