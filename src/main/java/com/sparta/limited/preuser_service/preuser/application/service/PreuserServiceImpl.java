@@ -37,7 +37,10 @@ public class PreuserServiceImpl implements PreuserService {
     @Override
     @Transactional
     public PreuserCreateResponse createPreuser(PreuserCreateRequest request) {
-        Preuser preuser = PreuserMapper.toEntity(request);
+        PreuserStatus status = PreuserStatus.fromRecruitStartAt(request.getRecruitStartAt());
+        
+        Preuser preuser = PreuserMapper.toEntity(request, status);
+
         Preuser saved = preuserRepository.save(preuser);
 
         return PreuserMapper.toPreuserCreateResponse(saved);
