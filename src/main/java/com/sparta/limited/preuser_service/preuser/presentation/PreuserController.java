@@ -1,11 +1,13 @@
 package com.sparta.limited.preuser_service.preuser.presentation;
 
+import com.sparta.limited.common_module.common.annotation.CurrentUserId;
 import com.sparta.limited.common_module.common.aop.RoleCheck;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserUpdateStatusRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.*;
 import com.sparta.limited.preuser_service.preuser.application.service.PreuserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api/v1/preusers")
 public class PreuserController {
 
@@ -65,7 +68,7 @@ public class PreuserController {
     @RoleCheck("ROLE_USER")
     public ResponseEntity<PreuserEventApplyResponse> applyPreuserEvents(
             @PathVariable UUID preuserId,
-            @RequestHeader("X-User-Id") Long userId
+            @CurrentUserId Long userId
     ) {
         PreuserEventApplyResponse response = preuserService.applyPreuserEvents(preuserId, userId);
 
