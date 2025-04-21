@@ -1,0 +1,6 @@
+services:
+  preuser-service:
+    platform: linux/amd64
+    build:
+      dockerfile: Dockerfile
+    image: junggeon/preuser-service:latest
