@@ -1,0 +1,37 @@
+### 체험단 신청
+POST localhost:8080/api/v1/preusers/events/0a48416b-7534-43c8-982e-7e24d16d10df
+Content-Type: application/json
+X-User-Id: 1
+X-User-Role: ROLE_USER
+
+### 체험단 기간에 맞지 않는 신청
+POST localhost:8080/api/v1/preusers/events/9c6029de-01e2-4b2b-9db5-d8b06766ec1e
+Content-Type: application/json
+X-User-Id: 1
+X-User-Role: ROLE_USER
+
+### 체험단 성별 제한에 맞지 않음
+POST localhost:8080/api/v1/preusers/events/0a48416b-7534-43c8-982e-7e24d16d10df
+Content-Type: application/json
+X-User-Id: 3
+X-User-Role: ROLE_USER
+
+### 체험단 나이 제한에 맞지 않음
+POST localhost:8080/api/v1/preusers/events/0a48416b-7534-43c8-982e-7e24d16d10df
+Content-Type: application/json
+X-User-Id: 2
+X-User-Role: ROLE_USER
+
+
+### 신청한 사용자가 신청 중복
+POST localhost:8080/api/v1/preusers/events/0a48416b-7534-43c8-982e-7e24d16d10df
+Content-Type: application/json
+X-User-Id: 1
+X-User-Role: ROLE_USER
+
+
+### 존재하지 않는 체험단 신청
+POST localhost:8080/api/v1/preusers/events/a0f90741-be87-4d1a-ad6a-cea22894aa79
+Content-Type: application/json
+X-User-Id: 1
+X-User-Role: ROLE_USER

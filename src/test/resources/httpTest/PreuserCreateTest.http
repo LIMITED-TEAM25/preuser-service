@@ -1,0 +1,17 @@
+### 체험단 정상 등록
+POST localhost:8080/api/v1/preusers/
+Content-Type: application/json
+
+{
+  "preuserTitle": "아이폰17 체험단",
+  "preuserCount": 17,
+  "preuserProductId": "123e4567-e89b-12d3-a456-426614174000",
+  "recruitStartAt": "2025-04-12T00:00:00",
+  "recruitEndAt": "2025-04-20T00:00:00",
+  "preuserStartAt": "2025-04-21T00:00:00",
+  "preuserEndAt": "2025-04-30T00:00:00",
+  "preuserStatus": "RECRUITING",
+  "announceDate": "2025-04-21T12:00:00"
+}
+
+###
