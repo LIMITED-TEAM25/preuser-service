@@ -65,8 +65,7 @@ public class PreuserCacheRepositoryImpl implements PreuserCacheRepository {
             if (!ttl.isNegative() && !ttl.isZero()) {
                 stringRedisTemplate.expire(key, ttl);
             }
-        } catch (Exception e) {
-            System.out.println("Redis error in addUserToPreuser: " + e.getMessage());
+        } catch (Exception ignored) {
         }
     }
 
