@@ -3,12 +3,14 @@ package com.sparta.limited.preuser_service.preuser.application.service;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.*;
 import com.sparta.limited.preuser_service.preuser.application.mapper.PreuserMapper;
-import com.sparta.limited.preuser_service.preuser.application.preuserSelector.PreuserSelector;
+import com.sparta.limited.preuser_service.preuser.application.preuserSelector.PreuserSelectorFromCache;
+import com.sparta.limited.preuser_service.preuser.application.preuserSelector.PreuserSelectorFromDB;
 import com.sparta.limited.preuser_service.preuser.application.validate.ApplyPreuserPeriodValidator;
 import com.sparta.limited.preuser_service.preuser.application.validate.ApplyPreuserUserAgeValidator;
 import com.sparta.limited.preuser_service.preuser.application.validate.ApplyPreuserUserGenderValidator;
 import com.sparta.limited.preuser_service.preuser.domain.model.Preuser;
 import com.sparta.limited.preuser_service.preuser.domain.model.PreuserUser;
+import com.sparta.limited.preuser_service.preuser.domain.repository.PreuserCacheRepository;
 import com.sparta.limited.preuser_service.preuser.domain.repository.PreuserRepository;
 import com.sparta.limited.preuser_service.preuser.domain.repository.PreuserUserRepository;
 import com.sparta.limited.preuser_service.preuser.domain.status.PreuserStatus;
@@ -33,12 +35,15 @@ public class PreuserServiceImpl implements PreuserService {
     private final PreuserRepository preuserRepository;
     private final PreuserUserRepository preuserUserRepository;
     private final UserClient userClient;
+    private final PreuserCacheRepository preuserCacheRepository;
+    private final PreuserSelectorFromDB preuserSelectorFromDB;
+    private final PreuserSelectorFromCache preuserSelectorFromCache;
 
     @Override
     @Transactional
     public PreuserCreateResponse createPreuser(PreuserCreateRequest request) {
         PreuserStatus status = PreuserStatus.fromRecruitStartAt(request.getRecruitStartAt());
-        
+
         Preuser preuser = PreuserMapper.toEntity(request, status);
 
         Preuser saved = preuserRepository.save(preuser);
@@ -82,11 +87,18 @@ public class PreuserServiceImpl implements PreuserService {
 
         Preuser preuser = preuserRepository.findWithPessimisticLockById(preuserId);
 
-        preuserUserRepository.existsByPreuserIdAndUserId(preuserId, userId);
+        preuserCacheRepository.existsApplyUserId(preuserId, userId);
 
         ApplyPreuserPeriodValidator.validate(preuser.getRecruitStartAt(), preuser.getRecruitEndAt());
 
-        UserSearchUserIdResponse response = userClient.getUserById(userId);
+        UserSearchUserIdResponse response = preuserCacheRepository.findUserInfo(userId);
+        if (response == null) {
+
+            response = userClient.getUserById(userId);
+
+            preuserCacheRepository.saveUserInfo(userId, response, preuser.getRecruitEndAt());
+        }
+
 
         ApplyPreuserUserAgeValidator.validate(preuser.getAgeLimit(), response.getAge());
 
@@ -95,6 +107,8 @@ public class PreuserServiceImpl implements PreuserService {
         PreuserUser preuserUser = PreuserUser.of(userId, preuser, false);
 
         preuserUserRepository.save(preuserUser);
+
+        preuserCacheRepository.addUserToPreuser(preuserId, userId, preuser.getPreuserEndAt());
 
         return PreuserMapper.toPreuserEventApplyResponse(preuser);
     }
@@ -109,10 +123,13 @@ public class PreuserServiceImpl implements PreuserService {
 
         List<PreuserUser> preuserUserList = preuserUserRepository.findByPreuserId(preuserId);
 
-        List<PreuserUser> selectedUsers = PreuserSelector.selectPreuser(
-                preuserUserList,
-                preuser.getPreuserCount()
-        );
+
+        List<PreuserUser> selectedUsers;
+        try {
+            selectedUsers = preuserSelectorFromCache.selectPreuser(preuserId, preuserUserList, preuser.getPreuserCount());
+        } catch (Exception e) {
+            selectedUsers = preuserSelectorFromDB.selectPreuser(preuserUserList, preuser.getPreuserCount());
+        }
 
         List<UserSearchUserIdResponse> userInfoList = new ArrayList<>();
 

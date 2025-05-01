@@ -5,6 +5,7 @@ import com.sparta.limited.common_module.common.aop.RoleCheck;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserCreateRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.request.PreuserUpdateStatusRequest;
 import com.sparta.limited.preuser_service.preuser.application.dto.response.*;
+import com.sparta.limited.preuser_service.preuser.application.service.PreuserCacheService;
 import com.sparta.limited.preuser_service.preuser.application.service.PreuserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +24,15 @@ import java.util.UUID;
 public class PreuserController {
 
     private final PreuserService preuserService;
-
+    private final PreuserCacheService preuserCacheService;
 
     @PostMapping
     @RoleCheck("ROLE_ADMIN")
     public ResponseEntity<PreuserCreateResponse> createPreuser(
-            @RequestBody PreuserCreateRequest request) {
+            @RequestBody PreuserCreateRequest request,
+            @RequestHeader("X-User-Role") String userRole ) {
         PreuserCreateResponse response = preuserService.createPreuser(request);
+        preuserCacheService.cacheAllUsersForPreuser(request.getPreuserEndAt(), userRole);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

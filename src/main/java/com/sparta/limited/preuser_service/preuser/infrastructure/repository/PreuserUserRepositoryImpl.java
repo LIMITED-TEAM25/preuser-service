@@ -19,10 +19,11 @@ public class PreuserUserRepositoryImpl implements PreuserUserRepository {
 
 
     @Override
-    public void existsByPreuserIdAndUserId(UUID preuserId, Long userId) {
+    public boolean existsByPreuserIdAndUserId(UUID preuserId, Long userId) {
         if (jpaPreuserUserRepository.existsByPreuserIdAndUserId(preuserId, userId)) {
             throw new BusinessException(ErrorCode.DUPLICATE_RESOURCE, "이미 신청한 사용자입니다.");
         }
+        return false;
     }
 
     @Override

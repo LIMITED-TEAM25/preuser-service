@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface PreuserUserRepository {
-    void existsByPreuserIdAndUserId(UUID preuserId, Long userId);
+    boolean existsByPreuserIdAndUserId(UUID preuserId, Long userId);
 
     void save(PreuserUser preuserUser);
 

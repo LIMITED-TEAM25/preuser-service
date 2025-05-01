@@ -1,17 +1,20 @@
 package com.sparta.limited.preuser_service.preuser.application.preuserSelector;
 
 import com.sparta.limited.preuser_service.preuser.domain.model.PreuserUser;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
+@Component
+public class PreuserSelectorFromDB {
 
-public class PreuserSelector {
-
-    private PreuserSelector() {
+    private PreuserSelectorFromDB() {
     }
 
-    public static List<PreuserUser> selectPreuser(
+    public List<PreuserUser> selectPreuser(
             List<PreuserUser> preuserUserList,
             int selectCount
     ) {
