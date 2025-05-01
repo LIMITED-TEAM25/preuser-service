@@ -123,10 +123,13 @@ public class PreuserServiceImpl implements PreuserService {
 
         List<PreuserUser> preuserUserList = preuserUserRepository.findByPreuserId(preuserId);
 
-        List<PreuserUser> selectedUsers = PreuserSelector.selectPreuser(
-                preuserUserList,
-                preuser.getPreuserCount()
-        );
+
+        List<PreuserUser> selectedUsers;
+        try {
+            selectedUsers = preuserSelectorFromCache.selectPreuser(preuserId, preuserUserList, preuser.getPreuserCount());
+        } catch (Exception e) {
+            selectedUsers = preuserSelectorFromDB.selectPreuser(preuserUserList, preuser.getPreuserCount());
+        }
 
         List<UserSearchUserIdResponse> userInfoList = new ArrayList<>();
 
